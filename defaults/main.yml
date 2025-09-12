@@ -1,0 +1,58 @@
+---
+# Service
+key_db_service_name: 'key-db'
+key_db_service_version: 'x86_64_v6.3.4'
+key_db_service_path: '/docker/{{ key_db_service_name }}'
+key_db_service_config_path: '{{ key_db_service_path }}/config'
+key_db_service_data_path: '{{ key_db_service_path}}/data'
+
+# Container
+key_db_cont_image: 'eqalpha/keydb:{{ key_db_service_version }}'
+key_db_cont_name: '{{ key_db_service_name }}-app'
+key_db_network: '{{ key_db_service_name }}-net'
+key_db_port: 6379
+key_db_restart_policy: 'unless-stopped'
+key_db_cont_uid: '1000'
+key_db_cont_gid: '1000'
+key_db_host_uid: '{{ 100000 + key_db_cont_uid | int }}'
+key_db_host_gid: '{{ 100000 + key_db_cont_gid | int }}'
+
+# Healthcheck defaults
+key_db_healthcheck_interval: '30s'
+key_db_healthcheck_timeout: '30s'
+key_db_healthcheck_retries: 3
+key_db_healthcheck_start_period: '10s'
+
+# General compose settings
+compose_recreate: 'always'
+compose_state: 'present'
+
+# Configuration
+key_db_appendonly: 'yes'
+key_db_appendfsync: 'everysec'
+key_db_save_intervals:
+  - '900 1'
+  - '300 10'
+  - '60 10000'
+key_db_databases: 16
+key_db_maxmemory: '1gb'
+key_db_maxmemory_policy: 'allkeys-lru'
+
+# Required, user is default
+# key_db_password: ~
+
+# System tuning
+key_db_sysctl_overcommit: true
+key_db_disable_transparent_hugepages: true
+
+# Topology(single, replica, multi_master)
+key_db_topology: 'multi_master'
+
+# Replica mode (only used when key_db_topology == 'replica')
+key_db_master_host: '10.0.0.2'
+key_db_master_port: 6379
+
+# Multi-master peers (ignored in other modes)
+key_db_peer_list: []
+#   - { host: '10.0.0.2', port: 6379 }
+#   - { host: '10.0.0.3', port: 6379 }

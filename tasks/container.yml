@@ -1,0 +1,10 @@
+---
+- name: 'Create container'
+  community.docker.docker_compose_v2:
+    project_src: '{{ key_db_service_path }}'
+    state: '{{ compose_state }}'
+    pull: 'always'
+    build: 'always'
+    wait: true
+    wait_timeout: 120
+    recreate: '{{ compose_recreate }}'

@@ -1,0 +1,28 @@
+---
+- name: Create base directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ key_db_host_uid }}"
+    group: "{{ key_db_host_gid }}"
+    mode: "0755"
+  loop:
+    - "{{ key_db_base_dir }}"
+    - "{{ key_db_data_dir }}"
+    - "{{ key_db_conf_dir }}"
+
+- name: Copy key_db.conf
+  template:
+    src: "key_db.conf.j2"
+    dest: "{{ key_db_conf_dir }}/key_db.conf"
+    owner: "{{ key_db_host_uid }}"
+    group: "{{ key_db_host_gid }}"
+    mode: "0640"
+
+- name: Copy docker-compose.yml
+  template:
+    src: "docker-compose.yml.j2"
+    dest: "{{ key_db_service_path }}/docker-compose.yml"
+    owner: "root"
+    group: "root"
+    mode: "0644"

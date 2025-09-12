@@ -1,0 +1,11 @@
+[Unit]
+Description=Disable Transparent Huge Pages (THP)
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/enabled'
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

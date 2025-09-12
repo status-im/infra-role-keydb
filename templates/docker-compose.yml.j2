@@ -1,0 +1,25 @@
+---
+services:
+  key_db:
+    image: '{{ key_db_cont_image }}'
+    container_name: '{{ key_db_cont_name }}'
+    user: '{{ key_db_cont_uid }}:{{ key_db_cont_gid }}'
+    command: ['keydb-server', '/etc/key_db/key_db.conf']
+    restart: '{{ key_db_restart_policy }}'
+    ports:
+      - '{{ key_db_port }}:{{ key_db_port }}'
+    volumes:
+      - '{{ key_db_service_data_path }}:/data'
+      - '{{ key_db_service_config_path }}/key_db.conf:/etc/key_db/key_db.conf:ro'
+    networks:
+      - '{{ key_db_network }}'
+    healthcheck:
+      test: ['CMD', 'keydb-cli', '-h', '127.0.0.1', 'ping']
+      interval: '{{ key_db_healthcheck_interval }}'
+      timeout: '{{ key_db_healthcheck_timeout }}'
+      retries: {{ key_db_healthcheck_retries }}
+      start_period: '{{ key_db_healthcheck_start_period }}'
+
+networks:
+  {{ key_db_network }}:
+    driver: bridge
