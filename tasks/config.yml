@@ -7,14 +7,14 @@
     group: "{{ key_db_host_gid }}"
     mode: "0755"
   loop:
-    - "{{ key_db_base_dir }}"
-    - "{{ key_db_data_dir }}"
-    - "{{ key_db_conf_dir }}"
+    - "{{ key_db_service_path }}"
+    - "{{ key_db_service_config_path }}"
+    - "{{ key_db_service_data_path }}"
 
 - name: Copy key_db.conf
   template:
     src: "key_db.conf.j2"
-    dest: "{{ key_db_conf_dir }}/key_db.conf"
+    dest: "{{ key_db_service_config_path }}/key_db.conf"
     owner: "{{ key_db_host_uid }}"
     group: "{{ key_db_host_gid }}"
     mode: "0640"

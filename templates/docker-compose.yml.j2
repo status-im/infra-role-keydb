@@ -12,7 +12,7 @@ services:
       - '{{ key_db_service_data_path }}:/data'
       - '{{ key_db_service_config_path }}/key_db.conf:/etc/key_db/key_db.conf:ro'
     networks:
-      - '{{ key_db_network }}'
+      - {{ key_db_cont_external_network | default('key-db-net') }}
     healthcheck:
       test: ['CMD', 'keydb-cli', '-h', '127.0.0.1', 'ping']
       interval: '{{ key_db_healthcheck_interval }}'
@@ -21,5 +21,10 @@ services:
       start_period: '{{ key_db_healthcheck_start_period }}'
 
 networks:
-  {{ key_db_network }}:
+{% if key_db_cont_external_network is defined %}
+  {{ key_db_cont_external_network }}:
+    external: true
+{% else %}
+  key-db-net:
     driver: bridge
+{% endif %}

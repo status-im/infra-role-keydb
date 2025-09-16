@@ -9,7 +9,7 @@ key_db_service_data_path: '{{ key_db_service_path}}/data'
 # Container
 key_db_cont_image: 'eqalpha/keydb:{{ key_db_service_version }}'
 key_db_cont_name: '{{ key_db_service_name }}-app'
-key_db_network: '{{ key_db_service_name }}-net'
+# key_db_cont_external_network: ~
 key_db_port: 6379
 key_db_restart_policy: 'unless-stopped'
 key_db_cont_uid: '1000'
@@ -26,6 +26,10 @@ key_db_healthcheck_start_period: '10s'
 # General compose settings
 compose_recreate: 'always'
 compose_state: 'present'
+compose_pull: 'always'
+compose_build: 'never'
+compose_timeout: 120
+
 
 # Configuration
 key_db_appendonly: 'yes'

@@ -1,10 +1,23 @@
 ---
+- name: Check if KeyDB external network exists
+  community.docker.docker_network_info:
+    name: "{{ key_db_cont_external_network }}"
+  register: key_db_external_network_info
+  when: key_db_cont_external_network is defined
+
+- name: Fail if KeyDB external network doesn't exist
+  fail:
+    msg: "KeyDB network '{{ key_db_cont_external_network }}' is defined but does not exist on the host."
+  when:
+    - key_db_cont_external_network is defined
+    - not key_db_external_network_info.exists
+
 - name: 'Create container'
   community.docker.docker_compose_v2:
     project_src: '{{ key_db_service_path }}'
     state: '{{ compose_state }}'
-    pull: 'always'
-    build: 'always'
+    pull: '{{ compose_pull }}'
+    build: '{{ compose_build }}'
     wait: true
-    wait_timeout: 120
+    wait_timeout: '{{ compose_timeout }}'
     recreate: '{{ compose_recreate }}'

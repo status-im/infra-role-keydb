@@ -6,9 +6,9 @@ protected-mode no
 databases {{ key_db_databases }}
 
 # ---- Auth / ACL ----
-requirepass {{ key_db_password }}
-masterauth {{ key_db_password }}
-user default on >{{ key_db_password }} ~* +@all
+requirepass {{ key_db_password | mandatory }}
+masterauth {{ key_db_password | mandatory }}
+user default on >{{ key_db_password | mandatory }} ~* +@all
 
 # --- Persistence ---
 appendonly {{ key_db_appendonly }}
